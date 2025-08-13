@@ -1,139 +1,265 @@
 <template>
-  <div id="app">
-    <!-- Sidebar -->
-    <aside>
-      <div class="sidebar">
-        <!-- Logo -->
-        <div class="sidebar-logo">
-          <img src="/logo.png" alt="BethanySchool" />
-        </div>
-
-        <!-- Menu Items -->
-        <router-link to="/" class="sidebar-item">
-          <font-awesome-icon icon="home" />
-          <span>Taleau de bord</span>z
-        </router-link>
-        <router-link to="/students" class="sidebar-item">
-          <font-awesome-icon icon="user-graduate" />
-          <span>Élève</span>
-        </router-link>
-        <router-link to="/teachers" class="sidebar-item">
-          <font-awesome-icon icon="chalkboard-teacher" />
-          <span>Enseignant</span>
-        </router-link>
-        <router-link to="/classes" class="sidebar-item">
-          <font-awesome-icon icon="school" />
-          <span>Classe</span>
-        </router-link>
-        <router-link to="/subjects" class="sidebar-item">
-          <font-awesome-icon icon="book-open" />
-          <span>Matiere</span>
-        </router-link>
-        <router-link to="/timetable" class="sidebar-item">
-          <font-awesome-icon icon="calendar-alt" />
-          <span>Calendrier</span>
-        </router-link>
-         
-        <router-link to="/results" class="sidebar-item">
-          <font-awesome-icon icon="poll" />
-          <span>Resultat</span>
-        </router-link>
-        <router-link to="/notifications" class="sidebar-item">
-          <font-awesome-icon icon="bell" />
-          <span>Notifications</span>
-        </router-link>
-        <router-link to="/parent-portal" class="sidebar-item">
-          <font-awesome-icon icon="users" />
-          <span>Parents élèves</span>
-        </router-link>
- 
-      </div>
-    </aside>
-
+  <v-app>
+    <!-- Navigation Drawer -->
+    <v-navigation-drawer
+      app
+      permanent
+      clipped
+      width="280"
+      class="sidebar"
+    >
+      <!-- Logo -->
+      <v-list-item class="px-4 logo-section">
+        <v-img
+          src="/logo.png"
+          max-width="120"
+          contain
+          aspect-ratio="1"
+          class="mx-auto my-4"
+        ></v-img>
+      </v-list-item>
+      
+      <!-- Menu -->
+      <v-divider class="sidebar-divider"></v-divider>
+      <v-list nav class="menu-list">
+        <v-list-item
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.to"
+          link
+          class="menu-item"
+        >
+          <!-- Icône à gauche -->
+          <template v-slot:prepend>
+            <div class="icon-wrapper">
+              <font-awesome-icon 
+                :icon="item.icon" 
+                fixed-width 
+                class="sidebar-fa-icon" 
+              />
+            </div>
+          </template>
+          
+          <!-- Texte à droite -->
+          <v-list-item-title class="sidebar-title">
+            {{ item.title }}
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+    
     <!-- Main Content -->
-    <main>
+    <v-main>
       <router-view />
-    </main>
-  </div>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faTachometerAlt,
+  faUserGraduate,
+  faChalkboardTeacher,
+  faBuilding,
+  faBookOpen,
+  faCalendarAlt,
+  faPoll,
+  faBell,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
+
+// Ajout des icônes à la bibliothèque
+library.add(
+  faTachometerAlt,
+  faUserGraduate,
+  faChalkboardTeacher,
+  faBuilding,
+  faBookOpen,
+  faCalendarAlt,
+  faPoll,
+  faBell,
+  faUsers
+);
+
 export default {
-  name: 'App'
+  name: 'SidebarLayout',
+  components: {
+    FontAwesomeIcon
+  },
+  data() {
+    return {
+      menuItems: [
+        { title: 'Tableau de bord', icon: ['fas', 'tachometer-alt'], to: '/' },
+        { title: 'Élèves', icon: ['fas', 'user-graduate'], to: '/students' },
+        { title: 'Enseignants', icon: ['fas', 'chalkboard-teacher'], to: '/teachers' },
+        { title: 'Classes', icon: ['fas', 'building'], to: '/classes' },
+        { title: 'Matières', icon: ['fas', 'book-open'], to: '/subjects' },
+        { title: 'Calendrier', icon: ['fas', 'calendar-alt'], to: '/timetable' },
+        { title: 'Résultats', icon: ['fas', 'poll'], to: '/results' },
+        { title: 'Notifications', icon: ['fas', 'bell'], to: '/notifications' },
+        { title: 'Parents', icon: ['fas', 'users'], to: '/parent-portal' }
+      ]
+    };
+  }
 };
 </script>
 
-<style>
-body {
-  background: #f4f6fb;
-}
-#app {
-  display: flex;
-  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-  background: #f4f6fb;
-  min-height: 100vh;
-}
+<style scoped>
+/* Police optionnelle - à ajouter globalement si désiré */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap'); */
 
-aside {
-  width: 250px;
-  background: linear-gradient(135deg, #1976d2 60%, #42a5f5 100%);
-  color: #fff;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow-y: auto;
-  box-shadow: 2px 0 12px rgba(25, 118, 210, 0.08);
-  z-index: 10;
-}
-
+/* Sidebar principale */
 .sidebar {
-  padding-top: 32px;
+  background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+  color: #ecf0f1;
+  border-right: 1px solid #34495e;
+  height: 100vh;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
 }
 
-.sidebar-logo {
-  text-align: center;
-  margin-bottom: 32px;
+/* Section logo */
+.logo-section {
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.sidebar-logo img {
-  max-width: 70%;
+/* Divider du menu */
+.sidebar-divider {
+  border-color: rgba(255, 255, 255, 0.1);
+  margin: 0 16px;
+}
+
+/* Liste du menu */
+.menu-list {
+  padding: 20px 16px;
+}
+
+/* Items du menu */
+.menu-item {
+  display: flex !important;
+  align-items: center !important;
+  margin: 8px 0;
+  padding: 14px 16px;
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 56px;
+  position: relative;
+  overflow: hidden;
 }
 
-.sidebar-item {
+/* Effet hover */
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* État actif */
+.v-list-item--active {
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.v-list-item--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 32px;
+  background: #3498db;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Wrapper d'icône */
+.icon-wrapper {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+  min-width: 44px;
+  min-height: 44px;
   display: flex;
   align-items: center;
-  padding: 14px 28px;
-  color: #fff;
-  text-decoration: none;
-  font-size: 17px;
-  border-radius: 0 24px 24px 0;
-  margin-bottom: 6px;
-  transition: background 0.2s, color 0.2s;
+  justify-content: center;
+  margin-right: 16px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.menu-item:hover .icon-wrapper {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Icône FontAwesome */
+.sidebar-fa-icon {
+  font-size: 20px;
+  color: #ecf0f1;
+  transition: color 0.3s ease;
+}
+
+.menu-item:hover .sidebar-fa-icon {
+  color: #ffffff;
+}
+
+/* Titre du menu */
+.sidebar-title {
+  font-size: 16px;
   font-weight: 500;
-}
-
-.sidebar-item svg {
-  margin-right: 14px;
-  font-size: 22px;
-}
-
-.sidebar-item.router-link-exact-active,
-.sidebar-item:hover {
-  background: rgba(255,255,255,0.18);
-  color: #ffe082;
-}
-
-main {
-  margin-left: 250px;
-  padding: 36px 24px 24px 24px;
+  color: #ecf0f1;
+  line-height: 1.2;
+  transition: color 0.3s ease;
+  margin: 0;
   flex: 1;
-  min-height: 100vh;
-  background: #f4f6fb;
-  box-shadow: none;
-  border-radius: 0;
 }
+
+.menu-item:hover .sidebar-title {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 960px) {
+  .sidebar {
+    width: 260px !important;
+  }
+  
+  .menu-item {
+    padding: 12px 14px;
+  }
+  
+  .sidebar-title {
+    font-size: 15px;
+  }
+}
+
+/* Animation d'entrée */
+.menu-item {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Stagger animation pour les items */
+.menu-item:nth-child(1) { animation-delay: 0.1s; }
+.menu-item:nth-child(2) { animation-delay: 0.2s; }
+.menu-item:nth-child(3) { animation-delay: 0.3s; }
+.menu-item:nth-child(4) { animation-delay: 0.4s; }
+.menu-item:nth-child(5) { animation-delay: 0.5s; }
+.menu-item:nth-child(6) { animation-delay: 0.6s; }
+.menu-item:nth-child(7) { animation-delay: 0.7s; }
+.menu-item:nth-child(8) { animation-delay: 0.8s; }
+.menu-item:nth-child(9) { animation-delay: 0.9s; }
 </style>
- 

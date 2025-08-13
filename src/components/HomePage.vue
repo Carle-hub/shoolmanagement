@@ -1,127 +1,171 @@
 <template>
-  <v-container class="fill-height d-flex flex-column align-center justify-center" style="background: #f4f6fb;">
-    <v-row>
-      <v-col cols="12" class="text-center">
-        <v-img src="../assets/logo.png" max-width="140" class="mx-auto mb-4" style="border-radius: 16px; box-shadow: 0 2px 12px rgba(25,118,210,0.08);" />
-        <h1 class="mb-2 font-weight-bold" style="color: #1976d2;">Bienvenue sur le portail de gestion scolaire</h1>
-        <p class="mb-6" style="color: #607d8b; font-size: 1.15rem;">Gérez facilement les élèves, enseignants, classes et plus encore.</p>
-        <v-row class="justify-center mb-8">
-          <v-col cols="12" md="3">
-            <v-card color="#e3f2fd" class="pa-4" elevation="2">
-              <div class="d-flex align-center">
-                <v-icon color="primary" size="36">mdi-account-group</v-icon>
-                <div class="ml-4">
-                  <div class="font-weight-bold" style="font-size: 1.2rem; color: #1976d2;">Élèves</div>
-                  <div style="font-size: 1.5rem; color: #263238;">1500</div>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-card color="#fff3e0" class="pa-4" elevation="2">
-              <div class="d-flex align-center">
-                <v-icon color="deep-orange" size="36">mdi-teach</v-icon>
-                <div class="ml-4">
-                  <div class="font-weight-bold" style="font-size: 1.2rem; color: #ff9800;">Enseignants</div>
-                  <div style="font-size: 1.5rem; color: #263238;">75</div>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-card color="#e8f5e9" class="pa-4" elevation="2">
-              <div class="d-flex align-center">
-                <v-icon color="success" size="36">mdi-school</v-icon>
-                <div class="ml-4">
-                  <div class="font-weight-bold" style="font-size: 1.2rem; color: #43a047;">Classes</div>
-                  <div style="font-size: 1.5rem; color: #263238;">35</div>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="3">
-            <v-card color="#f3e5f5" class="pa-4" elevation="2">
-              <div class="d-flex align-center">
-                <v-icon color="purple" size="36">mdi-book-open-page-variant</v-icon>
-                <div class="ml-4">
-                  <div class="font-weight-bold" style="font-size: 1.2rem; color: #8e24aa;">Matières</div>
-                  <div style="font-size: 1.5rem; color: #263238;">50</div>
-                </div>
-              </div>
-            </v-card>
+  <v-app>
+    <v-main class="custom-background">
+      <v-container fluid class="pa-6">
+        <!-- Welcome Banner -->
+        <v-sheet color="#34495e" dark rounded="lg" elevation="6" class="pa-8 mb-8">
+          <v-row align="center">
+            <v-col cols="12" md="8">
+              <h1 class="text-h3 font-weight-light">Bienvenue sur votre tableau de bord</h1>
+              <p class="subtitle-1">
+                Consultez rapidement les statistiques clés et accédez à vos modules.
+              </p>
+            </v-col>
+            <v-col cols="12" md="4" class="text-center">
+              <v-icon size="80">mdi-school</v-icon>
+            </v-col>
+          </v-row>
+        </v-sheet>
+
+        <!-- Stat Cards -->
+        <v-row dense>
+          <v-col cols="12" sm="6" md="3" v-for="stat in stats" :key="stat.title">
+            <v-hover v-slot="{ hover }">
+              <v-card
+                :elevation="hover ? 12 : 4"
+                :color="stat.color"
+                dark
+                rounded="lg"
+                class="transition-swing pa-4 stat-card"
+              >
+                <v-card-title class="d-flex justify-space-between align-center">
+                  <div>
+                    <div class="text-h4 font-weight-bold">{{ stat.value }}</div>
+                    <div class="text-subtitle-2">{{ stat.title }}</div>
+                  </div>
+                  <v-avatar :color="stat.color" size="56">
+                    <v-icon size="32">{{ stat.icon }}</v-icon>
+                  </v-avatar>
+                </v-card-title>
+              </v-card>
+            </v-hover>
           </v-col>
         </v-row>
-        <v-btn color="primary" large to="/students" class="mt-4" style="font-size: 1.1rem;">Voir les élèves</v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+
+        <!-- Quick Actions -->
+        <v-divider class="my-8"></v-divider>
+        <h2 class="text-h4 mb-4">Actions rapides</h2>
+        <v-row>
+          <v-col cols="12" sm="6" md="3" v-for="action in actions" :key="action.label">
+            <v-btn
+              block
+              color="#3498db"
+              large
+              rounded="lg"
+              :to="action.to"
+              class="action-btn pa-4"
+            >
+              <v-icon left>{{ action.icon }}</v-icon>
+              {{ action.label }}
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style scoped>
-
-</style>
- 
+<script>
+import axios from 'axios';
 
 export default {
-   
   name: 'HomePage',
-  mounted() {
-    this.renderCharts();
+  data() {
+    return {
+      stats: [
+        { title: 'Élèves', icon: 'mdi-account-group', value: 0, color: '#3498db' },
+        { title: 'Enseignants', icon: 'mdi-chalkboard-teacher', value: 0, color: '#2c3e50' },
+        { title: 'Classes', icon: 'mdi-domain', value: 0, color: '#34495e' },
+        { title: 'Matières', icon: 'mdi-book-open-variant', value: 0, color: '#e67e22' }
+      ],
+      actions: [
+        { label: 'Ajouter un élève', icon: 'mdi-account-plus', to: '/students' },
+        { label: 'Voir les enseignants', icon: 'mdi-chalkboard-teacher', to: '/teachers' },
+        { label: 'Voir les classes', icon: 'mdi-domain', to: '/classes' },
+        { label: 'Gérer les matières', icon: 'mdi-book-open-variant', to: '/subjects' }
+      ]
+    };
   },
-  methods: {
-    renderCharts() {
-      // Enregistrer les composants Chart.js nécessaires
-      Chart.register(...registerables);
-
-      // Enrollment Chart
-      const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
-      new Chart(enrollmentCtx, {
-        type: 'line',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [{
-            label: 'Enrollments',
-            data: [30, 45, 60, 50, 70, 80],
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-
-      // Attendance Chart
-      const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-      new Chart(attendanceCtx, {
-        type: 'bar',
-        data: {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-          datasets: [{
-            label: 'Attendance',
-            data: [90, 85, 95, 80, 85, 90],
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
+mounted() {
+  this.loadStats();
+},
+methods: {
+  async loadStats() {
+    try {
+      const [studentsRes, teachersRes, classesRes, subjectsRes] = await Promise.all([
+        axios.get('http://localhost:3000/students'),
+        axios.get('http://localhost:3000/teachers'),
+        axios.get('http://localhost:3000/classes'),
+        axios.get('http://localhost:3000/subjects')
+      ]);
+      // Élèves
+      if (Array.isArray(studentsRes.data)) {
+        this.stats[0].value = studentsRes.data.length;
+      } else if (Array.isArray(studentsRes.data.students)) {
+        this.stats[0].value = studentsRes.data.students.length;
+      } else if (typeof studentsRes.data.count === 'number') {
+        this.stats[0].value = studentsRes.data.count;
+      } else {
+        this.stats[0].value = 0;
+      }
+      // Enseignants
+      if (Array.isArray(teachersRes.data)) {
+        this.stats[1].value = teachersRes.data.length;
+      } else if (Array.isArray(teachersRes.data.teachers)) {
+        this.stats[1].value = teachersRes.data.teachers.length;
+      } else if (typeof teachersRes.data.count === 'number') {
+        this.stats[1].value = teachersRes.data.count;
+      } else {
+        this.stats[1].value = 0;
+      }
+      // Classes
+      if (Array.isArray(classesRes.data)) {
+        this.stats[2].value = classesRes.data.length;
+      } else if (Array.isArray(classesRes.data.classes)) {
+        this.stats[2].value = classesRes.data.classes.length;
+      } else if (typeof classesRes.data.count === 'number') {
+        this.stats[2].value = classesRes.data.count;
+      } else {
+        this.stats[2].value = 0;
+      }
+      // Matières
+      if (Array.isArray(subjectsRes.data)) {
+        this.stats[3].value = subjectsRes.data.length;
+      } else if (Array.isArray(subjectsRes.data.subjects)) {
+        this.stats[3].value = subjectsRes.data.subjects.length;
+      } else if (typeof subjectsRes.data.count === 'number') {
+        this.stats[3].value = subjectsRes.data.count;
+      } else {
+        this.stats[3].value = 0;
+      }
+    } catch (err) {
+      console.error('Erreur lors du chargement des statistiques :', err.response ? err.response.data : err.message);
     }
   }
+}
 };
+</script>
 
+<style scoped>
+.custom-background {
+  background-color: #ecf0f1;
+}
 
+.stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.action-btn {
+  text-transform: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #2980b9 !important;
+}
+</style>

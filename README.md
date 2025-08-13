@@ -1,3 +1,14 @@
+# Captures d'écran
+
+Voici quelques captures d'écran de l'application :
+
+| Page | Capture |
+|------|--------|
+| Accueil | ![Accueil](public/screenshots/home.png) |
+| Liste des classes | ![Classes](public/screenshots/classe.png) |
+| Liste des élèves | ![Élèves](public/screenshots/eleve.png) |
+| Liste des enseignants | ![Enseignants](public/screenshots/enseignant.png) |
+| Liste des matières | ![Matières](public/screenshots/matiere.png) |
 # School Management
 
 Ce projet est une application de gestion scolaire moderne développée avec Vue.js et Vuetify pour le frontend, et Node.js pour le backend.
@@ -79,5 +90,4 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+ 
